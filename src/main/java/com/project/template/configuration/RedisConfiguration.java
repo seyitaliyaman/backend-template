@@ -5,6 +5,7 @@ import io.lettuce.core.ClientOptions;
 import io.lettuce.core.resource.DefaultClientResources;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -12,12 +13,14 @@ import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisNode;
 import org.springframework.data.redis.connection.RedisSentinelConfiguration;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettucePoolingClientConfiguration;
 
 import java.time.Duration;
 
 @Configuration
+@EnableCaching
 @RequiredArgsConstructor
 public class RedisConfiguration {
 
@@ -25,7 +28,10 @@ public class RedisConfiguration {
 
     @Bean
     public RedisConnectionFactory connectionFactory(RedisSentinelConfiguration redisSentinelConfiguration, LettucePoolingClientConfiguration lettucePoolingClientConfiguration){
-        return new LettuceConnectionFactory(redisSentinelConfiguration,lettucePoolingClientConfiguration);
+
+        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
+
+        return new LettuceConnectionFactory(redisStandaloneConfiguration);
     }
 
     @Bean
