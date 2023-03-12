@@ -1,0 +1,92 @@
+server:
+  port: 9080
+
+management:
+  server:
+    port: 8080
+  endpoint:
+    health:
+      show-details: ALWAYS
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+logging:
+  level:
+    org.hibernate.persister.entity: ERROR
+    com.project.template: INFO
+    com.zaxxer.hikari.pool.HikariPool: INFO
+
+info:
+  build:
+    name: '@project.name@'
+    description: '@project.description@'
+    group: '@project.groupId@'
+    artifact: '@project.artifactId@'
+    version: '@project.version@'
+
+spring:
+  application:
+    name: '@application.name@'
+  jpa:
+    openInView: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddlAuto: validate
+    show-sql: true
+    format-sql: true
+    properties:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    hikari:
+      maximum-pool-size: ${DB_MAX_POOL_SIZE:20}
+      minimum-idle: ${DB_MIN_IDLE_SIZE:10}
+      idle-timeout: ${DB_IDLE_TIMEOUT:300000}
+      max-lifetime: ${DB_MAX_LIFETIME:300000}
+      connection-timeout: ${DB_CONNECTION_TIMEOUT:20000}
+  flyway:
+    enabled: ${FLYWAY_ENABLED:false}
+    user: ${FLYWAY_USER}
+    password: ${FLYWAY_PASSWORD}
+    url: ${spring.datasource.url}
+    schemas: ${FLYWAY_SCHEMAS}
+  cache:
+    type: redis
+
+projectdomain:
+  kafka:
+    brokers: ${KAFKA_BROKERS:localhost:9092}
+    maxRequestSize: ${KAFKA_MAX_REQUEST_SIZE:31457280}
+    batchSize: ${KAFKA_BATCH_SIZE:0}
+    maxPollRecord: ${KAFKA_POLL_RECORD:10}
+    autoCommitInterval: ${KAFKA_COMMIT_INTERVAL:500}
+    autoOffsetReset: ${KAFKA_OFFSET_RESET:latest}
+    groupId: ${KAFKA_GROUP_ID:domain-group-id}
+    application-id: ${APPLICATION_ID:domainname}
+    concurrency: ${KAFKA_CONCURRENCY:1}
+    lingerMs: ${KAFKA_LINGER_MS:100}
+    requestTimeout: ${KAFKA_REQUEST_TIMEOUT:1000}
+    enableIdempotence: ${KAFKA_ENABLE_IDEMPOTENCE:false}
+    enableAutoCommit: ${KAFKA_ENABLE_AUTO_COMMIT:true}
+  redis:
+    master: ${REDIS_MASTER:test-cluster}
+    nodes: ${REDIS_NODES:localhost:6379}
+    pool:
+      maxIdleConnection: ${REDIS_POOL_MAX_IDLE_CONNECTION:20}
+      minIdleConnection: ${REDIS_POOL_MIN_IDLE_CONNECTION:10}
+      maxTotalConnection: ${REDIS_POOL_MAX_TOTAL_CONNECTION:100}
+      testOnBorrow: ${REDIS_POOL_TEST_ON_BORROW:true}
+      lifo: ${REDIS_POOL_LIFO:false}
+      blockWhenExhausted: ${REDIS_POOL_BLOCK_WHEN_EXHAUSTED:false}
+      maxWaitMillis: ${REDIS_POOL_MAX_WAIT_MILLIS:2000}
+      commandTimedoutSec: ${REDIS_POOL_COMMAND_TIMED_OUT_SEC:30}
+    cacheTtlSecond: ${REDIS_CACHE_TTL_SECOND:30}
+
+api:
+  exception:
+    general:
+      code: 1
+      message: General error
